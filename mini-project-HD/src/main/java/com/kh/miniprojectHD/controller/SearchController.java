@@ -36,18 +36,21 @@ public class SearchController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    //주간 인기 매장 탑3
     @GetMapping("/weeklyTop3Rest")
     public ResponseEntity<List<RestListVO>> weeklyTop3Rest(){
         List<RestListVO> list = dao.weeklyTop3Rest();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    //주간 인기 리뷰 탑3
     @GetMapping("weeklyTop3Review")
     public ResponseEntity<List<ReviewVO>> weeklyTop3Review(){
         List<ReviewVO> list = dao.weeklyTop3Review();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    //JSON 파싱용 잭슨 라이브러리 사용
     @Getter
     @Setter
     private static class Restaurant {
@@ -58,9 +61,4 @@ public class SearchController {
         private String rating;
     }
 
-//    @Getter
-//    @Setter
-//    private static class searchKeyWord {
-//        private String[] keyword;
-//    }
 }

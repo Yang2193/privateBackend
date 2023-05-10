@@ -3,6 +3,8 @@ package com.kh.miniprojectHD.controller;
 
 import com.kh.miniprojectHD.dao.MemberDAO;
 import com.kh.miniprojectHD.vo.MemberVO;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +51,33 @@ public class MemberController {
         boolean isTrue = dao.memberDelete(getId);
         return new ResponseEntity<>(isTrue, HttpStatus.OK);
     }
+
+    @PostMapping("/newMember")
+    public ResponseEntity<Boolean> memberInsert(@RequestBody memberInfo mem){
+        System.out.println("회원가입 컨트롤러 작동");
+        boolean isTrue = dao.memberInsert(mem.getId(), mem.getPwd(), mem.getName(), mem.getEmail(), mem.getPhone(), mem.getNickname());
+        return new ResponseEntity<>(isTrue, HttpStatus.OK);
+    }
+
+    @PostMapping("/checkMember")
+    public ResponseEntity<Boolean> memberCheck(@RequestBody Map<String, String> id) {
+        System.out.println("중복ID 체크 컨트롤러 작동");
+        String checkId = id.get("id");
+        boolean isTrue = dao.regMemberCheck(checkId);
+        return new ResponseEntity<>(isTrue, HttpStatus.OK);
+    }
+
+    @Getter
+    @Setter
+    private static class memberInfo{
+        private String id;
+        private String pwd;
+        private String name;
+        private String email;
+        private String phone;
+        private String nickname;
+    }
+
 
 
 }

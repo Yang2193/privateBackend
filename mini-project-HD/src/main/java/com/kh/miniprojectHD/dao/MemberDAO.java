@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 @Repository
 public class MemberDAO {
     Connection conn = null;
@@ -118,8 +119,51 @@ public class MemberDAO {
         Common.close(pStmt);
         Common.close(conn);
         return false;
-
     }
 
+    //회원가입(박준하)
+    public boolean memberInsert(String id, String pwd, String name, String email, String phone, String nickname){
+        int result = 0;
+        String sql = "INSERT INTO MEMBER_INFO(MEMBER_ID, PASSWORD, NAME, EMAIL, PHONE_NUM, NICKNAME) VALUES(?,?,?,?,?,?)";
+
+        try {
+            conn = Common.getConnection();
+            pStmt = conn.prepareStatement(sql);
+
+            pStmt.setString(1, id);
+            pStmt.setString(2, pwd);
+            pStmt.setString(3, name);
+            pStmt.setString(4, email);
+            pStmt.setString(5, phone);
+            pStmt.setString(6, nickname);
+
+            result = pStmt.executeUpdate();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        Common.close(pStmt);
+        Common.close(conn);
+
+        if(result == 1) return true;
+        else return false;
+    }
+
+    public boolean regMemberCheck(String id) {
+        boolean isNotReg = false;
+        try {
+            conn = Common.getConnection();
+            stmt = conn.createStatement();
+            String sql = "SELECT * FROM MEMBER_INFO WHERE MEMBER_ID = " + "'" + id +"'";
+            rs = stmt.executeQuery(sql);
+            if(rs.next()) isNotReg = false;
+            else isNotReg = true;
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        Common.close(rs);
+        Common.close(stmt);
+        Common.close(conn);
+        return isNotReg; // 가입 되어 있으면 false, 가입이 안되어 있으면 true
+    }
 
 }
