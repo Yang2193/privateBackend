@@ -24,8 +24,11 @@ bin/
 *.ipr
 out/
 !**/src/main/**/out/
-!**/EmailConfig
 !**/src/test/**/out/
+
+### EmailConfig ###
+
+**/src/main/**/EmailConfig.java
 
 ### NetBeans ###
 /nbproject/private/
