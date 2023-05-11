@@ -166,4 +166,83 @@ public class MemberDAO {
         return isNotReg; // 가입 되어 있으면 false, 가입이 안되어 있으면 true
     }
 
+    // 이메일로 ID 확인 존재여부 확인 메소드
+    public boolean regMemberCheckEmail(String email) {
+        boolean result = false;
+        try {
+            conn = Common.getConnection();
+            stmt = conn.createStatement();
+            String sql = "SELECT * FROM MEMBER_INFO WHERE EMAIL = '" + email +"'";
+            rs = stmt.executeQuery(sql);
+            if(rs.next()) result = true;
+            else result = false;
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        Common.close(rs);
+        Common.close(stmt);
+        Common.close(conn);
+        return result; // ID가 존재하면 true
+    }
+
+    public boolean regMemberCheckEmail(String email, String id) {
+        boolean result = false;
+        try {
+            conn = Common.getConnection();
+            stmt = conn.createStatement();
+            String sql = "SELECT * FROM MEMBER_INFO WHERE EMAIL = '" + email +"' AND MEMBER_ID='" + id +"'";
+            rs = stmt.executeQuery(sql);
+            if(rs.next()) result = true;
+            else result = false;
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        Common.close(rs);
+        Common.close(stmt);
+        Common.close(conn);
+        return result; // ID&EMAIL로 체크했을 때 가입된 회원이 있으면 TRUE
+    }
+
+    //ID를 찾는 메소드
+    public String findId(String email){
+        String memberId = "존재하지 않음";
+        try {
+            conn = Common.getConnection();
+            stmt = conn.createStatement();
+            String sql = "SELECT MEMBER_ID FROM MEMBER_INFO WHERE EMAIL = " + "'" + email +"'";
+            rs = stmt.executeQuery(sql);
+
+            while(rs.next()){
+                 memberId = rs.getString("MEMBER_ID");
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        Common.close(rs);
+        Common.close(stmt);
+        Common.close(conn);
+
+        return memberId;
+    }
+
+    //PW를 임시코드로 바꾸는 메소드
+    public Boolean findPw(String newPw, String email, String id){
+        int result = 0;
+        String sql = "UPDATE MEMBER_INFO SET PASSWORD = '"+ newPw + "' " +  "WHERE MEMBER_ID = '" + id + "' AND EMAIL = '" + email + "'";
+        try {
+            conn = Common.getConnection();
+            pStmt = conn.prepareStatement(sql);
+            result = pStmt.executeUpdate();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        Common.close(pStmt);
+        Common.close(conn);
+
+        if(result == 1) return true;
+        else return false;
+    }
+
 }

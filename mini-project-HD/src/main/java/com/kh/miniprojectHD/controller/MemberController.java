@@ -55,7 +55,9 @@ public class MemberController {
     @PostMapping("/newMember")
     public ResponseEntity<Boolean> memberInsert(@RequestBody memberInfo mem){
         System.out.println("회원가입 컨트롤러 작동");
-        boolean isTrue = dao.memberInsert(mem.getId(), mem.getPwd(), mem.getName(), mem.getEmail(), mem.getPhone(), mem.getNickname());
+//        boolean isTrue = dao.memberInsert(mem.getId(), mem.getPwd(), mem.getName(), mem.getEmail(), mem.getPhone(), mem.getNickname());
+        boolean isTrue = dao.memberInsert(mem.id, mem.pwd, mem.name, mem.email, mem.phone, mem.nickname);
+
         return new ResponseEntity<>(isTrue, HttpStatus.OK);
     }
 
@@ -66,6 +68,26 @@ public class MemberController {
         boolean isTrue = dao.regMemberCheck(checkId);
         return new ResponseEntity<>(isTrue, HttpStatus.OK);
     }
+
+    //이메일 정보를 받아 가입된 회원이 있는지 여부 체크
+    @PostMapping("/checkMemberEmail")
+    public ResponseEntity<Boolean> memberCheckEmail(@RequestBody Map<String, String> email) {
+        System.out.println("이메일 체크 컨트롤러 작동");
+        String checkEmail = email.get("email");
+        boolean isTrue = dao.regMemberCheckEmail(checkEmail);
+        return new ResponseEntity<>(isTrue, HttpStatus.OK);
+    }
+
+    @PostMapping("/checkMemberIdEmail")
+    public ResponseEntity<Boolean> memberCheckIdEmail(@RequestBody Map<String, String> obj){
+        System.out.println("패스워드 변경 컨트롤러 작동");
+        String email = obj.get("email");
+        String id = obj.get("id");
+        boolean result = dao.regMemberCheckEmail(email, id);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+
 
     @Getter
     @Setter
